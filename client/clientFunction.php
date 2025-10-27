@@ -72,4 +72,3 @@ function registerClient($name, $surname, $address, $phone, $age, $passwd, $usern
     $stmt->bindParam('age', $age);
     $stmt->execute();
 }
-

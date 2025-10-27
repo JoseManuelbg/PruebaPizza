@@ -5,7 +5,23 @@ include("./orderFunction.php");
 include("./pizzaFunctions.php");
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
-    
+    $totalPrice = 0;
+    var_dump($_SESSION['cart']);
+    foreach($_SESSION['cart'] as $pizza){
+        $sizeDiameter = getSizeById(getSizesDiameter(),$pizza['size_id']);
+        $totalPrice=+ $sizeDiameter['diametro'] * $pizza['ingredients']['0'];
+        $totalPrice=+ $sizeDiameter['diametro'] * $pizza['ingredients']['1'];
+        $totalPrice=+ $sizeDiameter['diametro'] * $pizza['ingredients']['2'];
+        $username = $_SESSION['user'];
+        $price = $totalPrice;
+        $sizeId = $pizza['size_id'];
+        $ing1Id = $pizza['ingredients']['0'];
+        $ing2Id = $pizza['ingredients']['1'];
+        $ing3Id = $pizza['ingredients']['2'];
+        addPizzaOrder($username, $price, $sizeId, $ing1Id, $ing2Id, $ing3Id);
+        unset($_SESSION['cart']);
+        echo "<script>window.location.href = './orderNumber.php'</script>";
+    }
 }
 
 
@@ -20,7 +36,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 </head>
 <body>
     <?php
-
+        $totalPrice = 0;
         $ingredients = getIngredients();
         $size = getSizesDiameter();
         if(!isset($_SESSION['cart']) || empty($_SESSION['cart'])){
@@ -32,15 +48,19 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 foreach($pizza['ingredients'] as $ingredient){
                     $ing = getIngredientById($ingredients, $ingredient);
                     echo "<p>".$ing['ingrediente']," ", ($ing['precio'] * $sizeText['diametro'])."</p>";
+                    $totalPrice += ($ing['precio'] * $sizeText['diametro']);
                 }
                 echo '<hr>';
         }
+        echo " <form method='POST'>
+        <button type='submit'>Comprar</button>
+    </form>";
+    echo "Total: ",  $totalPrice;
+
         }
         
     ?>
-    <form method="POST">
-        <button type="submit">Comprar</button>
-    </form>
+   
 </body>
 </html>
 

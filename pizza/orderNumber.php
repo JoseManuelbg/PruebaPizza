@@ -15,6 +15,9 @@ include("./pizzaFunctions.php");
 <body>
     <h2>Pedido hecho correctamente</h2>
     <p>Aqui tiene su numero para rastrear su pedido: </p>
+    <?php 
+    echo random_int(0, 9999);
+    ?>
 </body>
 </html>
 
